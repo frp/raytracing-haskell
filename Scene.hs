@@ -39,7 +39,7 @@ renderPixel :: Scene -> Int -> Int -> PixelRGB8
 renderPixel (Scene width height fovX spheres ambientLight lights) x y =
   case scene `traceRay` ray of
     Nothing     -> PixelRGB8 0 0 0
-    Just sphere -> colorVectorToPixelColor (color sphere)
+    Just sphere -> colorVectorToPixelColor (color sphere `perComponentMul` ambientLight)
     where
       scene = Scene width height fovX spheres ambientLight lights
       ray = Ray (0, 0, 0) (fromIntegral x - fromIntegral width / 2, fromIntegral height / 2 - fromIntegral y, renderPlane scene)

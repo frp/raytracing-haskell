@@ -1,5 +1,5 @@
 module Geometry (
-  Ray(Ray), Sphere(Sphere), Vector3, intersect, color
+  Ray(Ray), Sphere(Sphere), Vector3, intersect, color, perComponentMul
 ) where
 
 -- 2D vector
@@ -43,6 +43,9 @@ dot (x1, y1, z1) (x2, y2, z2) = x1 * x2 + y1 * y2 + z1 * z2
 
 sqr :: Vector3 -> Double
 sqr (x, y, z) = x^2 + y^2 + z^2
+
+perComponentMul :: Vector3 -> Vector3 -> Vector3
+perComponentMul (x1, y1, z1) (x2, y2, z2) = (x1 * x2, y1 * y2, z1 * z2)
 
 -- returns the distance from ray origin to intersection point
 -- or Nothing, if no intersection exists
