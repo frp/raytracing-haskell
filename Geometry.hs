@@ -49,15 +49,15 @@ sqr (x, y, z) = x^2 + y^2 + z^2
 intersect :: Ray -> Sphere -> Maybe Double
 intersect ray sphere =
   let
-    d_base = -((direction ray) `dot` (rayOrigin ray `sub` sphereOrigin sphere))
-    discriminant = (direction ray `dot` (rayOrigin ray `sub` sphereOrigin sphere)) ^ 2 - sqr (rayOrigin ray `sub` sphereOrigin sphere) + (sphereRadius sphere) ^ 2
+    d_base = -(direction ray `dot` (rayOrigin ray `sub` sphereOrigin sphere))
+    discriminant = (direction ray `dot` (rayOrigin ray `sub` sphereOrigin sphere)) ^ 2 - sqr (rayOrigin ray `sub` sphereOrigin sphere) + sphereRadius sphere ^ 2
   in
     if discriminant < 0
     then Nothing
     else
       let
-        d1 = d_base + sqrt(discriminant)
-        d2 = d_base - sqrt(discriminant)
+        d1 = d_base + sqrt discriminant
+        d2 = d_base - sqrt discriminant
       in
         if d1 < 0
         then Nothing
