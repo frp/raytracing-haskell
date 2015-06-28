@@ -61,5 +61,4 @@ intersect ray sphere =
       in
         if d1 < 0
         then Nothing
-        else
-          if d2 >= 0 then Just (min d1 d2) else Just d1
+        else Just (if d2 >= 0 then min d1 d2 else d1)

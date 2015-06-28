@@ -30,13 +30,12 @@ colorVectorToPixelColor (r, g, b) = PixelRGB8 (round (r*255)) (round (g * 255)) 
 
 renderPixel :: Scene -> Int -> Int -> PixelRGB8
 renderPixel (Scene width height fovX spheres) x y =
-  let
-    scene = Scene width height fovX spheres
-    ray = Ray (0, 0, 0) (fromIntegral x - fromIntegral width / 2, fromIntegral height / 2 - fromIntegral y, renderPlane scene)
-  in
-    case scene `traceRay` ray of
-      Nothing     -> PixelRGB8 0 0 0
-      Just sphere -> colorVectorToPixelColor (color sphere)
+  case scene `traceRay` ray of
+    Nothing     -> PixelRGB8 0 0 0
+    Just sphere -> colorVectorToPixelColor (color sphere)
+    where
+      scene = Scene width height fovX spheres
+      ray = Ray (0, 0, 0) (fromIntegral x - fromIntegral width / 2, fromIntegral height / 2 - fromIntegral y, renderPlane scene)
 
 render :: Scene -> Image PixelRGB8
 render scene = generateImage (renderPixel scene) (width scene) (height scene)
