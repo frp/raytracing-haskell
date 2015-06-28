@@ -19,12 +19,9 @@ traceRay :: Scene -> Ray -> Maybe Sphere
 traceRay scene ray =
   let
     processSphere sphere (bestDistance, bestSphere) =
-      let
-        distance = ray `intersect` sphere
-        returnValue Nothing = (bestDistance, bestSphere)
-        returnValue (Just dist) = (dist, Just sphere)
-      in
-        returnValue distance
+      case ray `intersect` sphere of
+        Nothing   -> (bestDistance, bestSphere)
+        Just dist -> (dist, Just sphere)
   in
     snd (foldr processSphere (infinity, Nothing) (spheres scene))
 
@@ -36,11 +33,10 @@ renderPixel (Scene width height fovX spheres) x y =
   let
     scene = Scene width height fovX spheres
     ray = Ray (0, 0, 0) (fromIntegral x - fromIntegral width / 2, fromIntegral height / 2 - fromIntegral y, renderPlane scene)
-    shadeObject Nothing = PixelRGB8 0 0 0
-    shadeObject (Just object) = colorVectorToPixelColor (color object)
-    shape = scene `traceRay` ray
   in
-    shadeObject shape
+    case scene `traceRay` ray of
+      Nothing     -> PixelRGB8 0 0 0
+      Just sphere -> colorVectorToPixelColor (color sphere)
 
 render :: Scene -> Image PixelRGB8
 render scene = generateImage (renderPixel scene) (width scene) (height scene)
